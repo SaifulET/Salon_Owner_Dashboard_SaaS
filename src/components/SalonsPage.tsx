@@ -121,6 +121,8 @@ export default function SalonsPage({
   // Filter Dropdown Toggles
   const [isRegionDropdownOpen, setIsRegionDropdownOpen] = useState(false);
   const [isCityDropdownOpen, setIsCityDropdownOpen] = useState(false);
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+  const [isPlanDropdownOpen, setIsPlanDropdownOpen] = useState(false);
 
   // Search Inputs inside Dropdowns
   const [regionSearch, setRegionSearch] = useState("");
@@ -129,6 +131,8 @@ export default function SalonsPage({
   // Refs for closing dropdowns on click outside
   const regionRef = useRef<HTMLDivElement>(null);
   const cityRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLDivElement>(null);
+  const planRef = useRef<HTMLDivElement>(null);
 
   // Selection state
   const [selectedSalonIds, setSelectedSalonIds] = useState<string[]>([]);
@@ -207,6 +211,12 @@ export default function SalonsPage({
       }
       if (cityRef.current && !cityRef.current.contains(event.target as Node)) {
         setIsCityDropdownOpen(false);
+      }
+      if (statusRef.current && !statusRef.current.contains(event.target as Node)) {
+        setIsStatusDropdownOpen(false);
+      }
+      if (planRef.current && !planRef.current.contains(event.target as Node)) {
+        setIsPlanDropdownOpen(false);
       }
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setActiveActionMenuId(null);
@@ -508,10 +518,10 @@ export default function SalonsPage({
       <div className="bg-white rounded-xl p-6 shadow-[0_4px_18px_rgba(17,31,56,0.06)] flex flex-col gap-6">
 
         {/* Filters Single Auto Layout Row */}
-        <div className="flex flex-row items-end p-0 gap-6 w-full max-w-[1151px] h-auto min-h-[60px] pb-1 flex-none order-0 self-stretch grow-0 overflow-x-auto no-scrollbar">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-end p-0 gap-6 w-full max-w-[1151px] h-auto pb-1 flex-none order-0 self-stretch grow-0">
 
-          {/* Status Buttons (Frame 1000003720) */}
-          <div className="flex flex-col items-start p-0 gap-2 w-[219px] h-[60px] flex-none order-0 grow-0 shrink-0">
+          {/* Status Buttons / Dropdown */}
+          <div className="flex flex-col items-start p-0 gap-2 w-full sm:w-[219px] h-auto sm:h-[60px] flex-none order-0 grow-0 shrink-0 relative" ref={statusRef}>
             {/* Label wrapper (Frame 1000004002) */}
             <div className="flex flex-row items-center p-0 gap-2 w-[63px] h-[16px] flex-none order-0 grow-0">
               <span className="w-[39px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">Status</span>
@@ -519,8 +529,9 @@ export default function SalonsPage({
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
               </svg>
             </div>
-            {/* Buttons wrapper (Frame 1000003716) */}
-            <div className="flex flex-row items-center p-0 gap-2 w-[219px] h-[36px] flex-none order-1 grow-0">
+            
+            {/* Desktop Buttons (Visible on screens sm and up) */}
+            <div className="hidden sm:flex flex-row items-center p-0 gap-2 w-[219px] h-[36px] flex-none order-1 grow-0">
               {/* All */}
               <button
                 type="button"
@@ -528,7 +539,7 @@ export default function SalonsPage({
                   setSelectedStatus("All");
                   setCurrentPage(1);
                 }}
-                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[46px] h-[36px] rounded-[8px] flex-none order-0 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedStatus === "All"
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[46px] h-[36px] rounded-[8px] flex-none order-0 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center cursor-pointer ${selectedStatus === "All"
                     ? "border border-[#635BFF] text-[#635BFF]"
                     : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
                   }`}
@@ -542,7 +553,7 @@ export default function SalonsPage({
                   setSelectedStatus("Active");
                   setCurrentPage(1);
                 }}
-                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[68px] h-[36px] rounded-[8px] flex-none order-1 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedStatus === "Active"
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[68px] h-[36px] rounded-[8px] flex-none order-1 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center cursor-pointer ${selectedStatus === "Active"
                     ? "border border-[#635BFF] text-[#635BFF]"
                     : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
                   }`}
@@ -556,7 +567,7 @@ export default function SalonsPage({
                   setSelectedStatus("Cancelled");
                   setCurrentPage(1);
                 }}
-                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[89px] h-[36px] rounded-[8px] flex-none order-2 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedStatus === "Cancelled"
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[89px] h-[36px] rounded-[8px] flex-none order-2 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center cursor-pointer ${selectedStatus === "Cancelled"
                     ? "border border-[#635BFF] text-[#635BFF]"
                     : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
                   }`}
@@ -564,13 +575,48 @@ export default function SalonsPage({
                 Cancelled
               </button>
             </div>
+
+            {/* Mobile Dropdown (Visible on screens smaller than sm) */}
+            <div className="flex sm:hidden relative w-full h-[36px]">
+              <button
+                type="button"
+                onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
+                className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-full h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none"
+              >
+                <div className="flex flex-row justify-between items-center p-0 gap-3 w-full h-[16px]">
+                  <span className="font-['Manrope'] font-medium text-[12px] leading-[16px] text-[#29343D]">{selectedStatus}</span>
+                  <svg width="12.06" height="7" viewBox="0 0 12.06 7" fill="none">
+                    <path d="M1 1L6.03 6L11.06 1" stroke="#29343D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              </button>
+              {isStatusDropdownOpen && (
+                <div className="absolute top-[40px] left-0 right-0 bg-white border border-[#eef2f6] rounded-[8px] shadow-xl z-30 p-2 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                  {["All", "Active", "Cancelled"].map((status) => (
+                    <button
+                      key={status}
+                      type="button"
+                      onClick={() => {
+                        setSelectedStatus(status);
+                        setIsStatusDropdownOpen(false);
+                        setCurrentPage(1);
+                      }}
+                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedStatus === status ? "text-[#635BFF] bg-indigo-50/40" : "text-slate-600"}`}
+                    >
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Plan Buttons (Frame 1000003721) */}
-          <div className="flex flex-col items-start p-0 gap-2 w-[306px] h-[60px] flex-none order-1 grow-0 shrink-0">
+          {/* Plan Buttons / Dropdown */}
+          <div className="flex flex-col items-start p-0 gap-2 w-full sm:w-[306px] h-auto sm:h-[60px] flex-none order-1 grow-0 shrink-0 relative" ref={planRef}>
             <span className="w-[25px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">Plan</span>
-            {/* Buttons wrapper (Frame 1000003716) */}
-            <div className="flex flex-row items-center p-0 gap-2 w-[306px] h-[36px] flex-none order-1 grow-0">
+            
+            {/* Desktop Buttons (Visible on screens sm and up) */}
+            <div className="hidden sm:flex flex-row items-center p-0 gap-2 w-[306px] h-[36px] flex-none order-1 grow-0">
               {/* All */}
               <button
                 type="button"
@@ -578,7 +624,7 @@ export default function SalonsPage({
                   setSelectedPlan("All");
                   setCurrentPage(1);
                 }}
-                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[46px] h-[36px] rounded-[8px] flex-none order-0 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "All"
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[46px] h-[36px] rounded-[8px] flex-none order-0 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center cursor-pointer ${selectedPlan === "All"
                     ? "border border-[#635BFF] text-[#635BFF]"
                     : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
                   }`}
@@ -592,7 +638,7 @@ export default function SalonsPage({
                   setSelectedPlan("Basic");
                   setCurrentPage(1);
                 }}
-                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[63px] h-[36px] rounded-[8px] flex-none order-1 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "Basic"
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[63px] h-[36px] rounded-[8px] flex-none order-1 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center cursor-pointer ${selectedPlan === "Basic"
                     ? "border border-[#635BFF] text-[#635BFF]"
                     : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
                   }`}
@@ -606,7 +652,7 @@ export default function SalonsPage({
                   setSelectedPlan("Premium");
                   setCurrentPage(1);
                 }}
-                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[82px] h-[36px] rounded-[8px] flex-none order-2 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "Premium"
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[82px] h-[36px] rounded-[8px] flex-none order-2 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center cursor-pointer ${selectedPlan === "Premium"
                     ? "border border-[#635BFF] text-[#635BFF]"
                     : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
                   }`}
@@ -620,7 +666,7 @@ export default function SalonsPage({
                   setSelectedPlan("Enterprise");
                   setCurrentPage(1);
                 }}
-                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[91px] h-[36px] rounded-[8px] flex-none order-3 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center ${selectedPlan === "Enterprise"
+                className={`box-border flex flex-row justify-center items-center py-2.5 px-4 gap-2.5 w-[91px] h-[36px] rounded-[8px] flex-none order-3 grow-0 transition-all font-['Manrope'] font-medium text-[12px] leading-[16px] text-center cursor-pointer ${selectedPlan === "Enterprise"
                     ? "border border-[#635BFF] text-[#635BFF]"
                     : "border border-[#EFF4FA] text-[#0A2540] hover:bg-slate-50"
                   }`}
@@ -628,18 +674,52 @@ export default function SalonsPage({
                 Enterprise
               </button>
             </div>
+
+            {/* Mobile Dropdown (Visible on screens smaller than sm) */}
+            <div className="flex sm:hidden relative w-full h-[36px]">
+              <button
+                type="button"
+                onClick={() => setIsPlanDropdownOpen(!isPlanDropdownOpen)}
+                className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-full h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none"
+              >
+                <div className="flex flex-row justify-between items-center p-0 gap-3 w-full h-[16px]">
+                  <span className="font-['Manrope'] font-medium text-[12px] leading-[16px] text-[#29343D]">{selectedPlan}</span>
+                  <svg width="12.06" height="7" viewBox="0 0 12.06 7" fill="none">
+                    <path d="M1 1L6.03 6L11.06 1" stroke="#29343D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              </button>
+              {isPlanDropdownOpen && (
+                <div className="absolute top-[40px] left-0 right-0 bg-white border border-[#eef2f6] rounded-[8px] shadow-xl z-30 p-2 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                  {["All", "Basic", "Premium", "Enterprise"].map((plan) => (
+                    <button
+                      key={plan}
+                      type="button"
+                      onClick={() => {
+                        setSelectedPlan(plan);
+                        setIsPlanDropdownOpen(false);
+                        setCurrentPage(1);
+                      }}
+                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedPlan === plan ? "text-[#635BFF] bg-indigo-50/40" : "text-slate-600"}`}
+                    >
+                      {plan}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Region Dropdown (Frame 1000003722) */}
-          <div className="flex flex-col items-start p-0 gap-2 w-[150px] h-[60px] flex-none order-2 grow-0 shrink-0 relative" ref={regionRef}>
+          {/* Region Dropdown */}
+          <div className="flex flex-col items-start p-0 gap-2 w-full sm:w-[150px] h-[60px] flex-none order-2 grow-0 shrink-0 relative" ref={regionRef}>
             <span className="w-[41px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">Region</span>
             <button
               type="button"
               onClick={() => setIsRegionDropdownOpen(!isRegionDropdownOpen)}
-              className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-[150px] h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none flex-none order-1 grow-0"
+              className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-full sm:w-[150px] h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none flex-none order-1 grow-0"
             >
               {/* txt */}
-              <div className="flex flex-row justify-between items-center p-0 gap-3 w-[118px] h-[16px] flex-none order-0 grow-0">
+              <div className="flex flex-row justify-between items-center p-0 gap-3 w-full h-[16px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-medium text-[12px] leading-[16px] text-center text-[#29343D] flex-none order-0 grow-0 truncate max-w-[85px]">{selectedRegion}</span>
                 <svg width="12.06" height="7" viewBox="0 0 12.06 7" fill="none" className="flex-none order-1 grow-0">
                   <path d="M1 1L6.03 6L11.06 1" stroke="#29343D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -669,7 +749,7 @@ export default function SalonsPage({
                         setRegionSearch("");
                         setCurrentPage(1);
                       }}
-                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedRegion === reg ? "text-[#5e53fc] bg-indigo-50/40" : "text-slate-600"
+                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedRegion === reg ? "text-[#635BFF] bg-indigo-50/40" : "text-slate-600"
                         }`}
                     >
                       {reg}
@@ -685,16 +765,16 @@ export default function SalonsPage({
             )}
           </div>
 
-          {/* City Dropdown (Frame 1000003724) */}
-          <div className="flex flex-col items-start p-0 gap-2 w-[150px] h-[60px] flex-none order-3 grow-0 shrink-0 relative" ref={cityRef}>
+          {/* City Dropdown */}
+          <div className="flex flex-col items-start p-0 gap-2 w-full sm:w-[150px] h-[60px] flex-none order-3 grow-0 shrink-0 relative" ref={cityRef}>
             <span className="w-[24px] h-[16px] font-['Manrope'] font-semibold text-[12px] leading-[16px] text-[#98A4AE] flex-none order-0 grow-0">City</span>
             <button
               type="button"
               onClick={() => setIsCityDropdownOpen(!isCityDropdownOpen)}
-              className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-[150px] h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none flex-none order-1 grow-0"
+              className="box-border flex flex-col justify-center items-center p-[10px_16px] gap-2.5 w-full sm:w-[150px] h-[36px] border border-[#EFF4FA] rounded-[8px] bg-white cursor-pointer select-none flex-none order-1 grow-0"
             >
               {/* txt */}
-              <div className="flex flex-row justify-between items-center p-0 gap-3 w-[118px] h-[16px] flex-none order-0 grow-0">
+              <div className="flex flex-row justify-between items-center p-0 gap-3 w-full h-[16px] flex-none order-0 grow-0">
                 <span className="font-['Manrope'] font-medium text-[12px] leading-[16px] text-center text-[#29343D] flex-none order-0 grow-0 truncate max-w-[85px]">{selectedCity === "All cities" ? "All cities" : selectedCity}</span>
                 <svg width="12.06" height="7" viewBox="0 0 12.06 7" fill="none" className="flex-none order-1 grow-0">
                   <path d="M1 1L6.03 6L11.06 1" stroke="#29343D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -724,7 +804,7 @@ export default function SalonsPage({
                         setCitySearch("");
                         setCurrentPage(1);
                       }}
-                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedCity === cit ? "text-[#5e53fc] bg-indigo-50/40" : "text-slate-600"
+                      className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-xl hover:bg-slate-50 transition-colors ${selectedCity === cit ? "text-[#635BFF] bg-indigo-50/40" : "text-slate-600"
                         }`}
                     >
                       {cit}

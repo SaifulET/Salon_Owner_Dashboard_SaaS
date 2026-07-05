@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import AddTaskModal from "./AddTask";
 import AssignToModal from "./AddAssignTo";
 import ViewLeadModal from "./SeeMore";
@@ -1246,6 +1246,25 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
   const [priorityFilter, setPriorityFilter] = useState<"All" | "Low" | "Medium" | "High">("All");
   const [columnDropdownOpenId, setColumnDropdownOpenId] = useState<string | null>(null);
 
+  const [dataRange, setDataRange] = useState<string>("All Time");
+  const [isDataRangeDropdownOpen, setIsDataRangeDropdownOpen] = useState(false);
+
+  const dataRangeRef = useRef<HTMLDivElement>(null);
+  const columnsDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dataRangeRef.current && !dataRangeRef.current.contains(event.target as Node)) {
+        setIsDataRangeDropdownOpen(false);
+      }
+      if (columnsDropdownRef.current && !columnsDropdownRef.current.contains(event.target as Node)) {
+        setColumnVisibilityMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
   const [activeActionsRowId, setActiveActionsRowId] = useState<string | null>(null);
   const [activeAssigneeRowId, setActiveAssigneeRowId] = useState<string | null>(null);
@@ -1534,8 +1553,8 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
           <section className="relative w-full rounded-[12px] bg-white p-0 shadow-[0px_2px_4px_-1px_rgba(175,182,201,0.2)]">
 
           {/* Section Subtabs Header */}
-          <div className="flex items-center border-b border-[#E0E6EB] px-[30px] h-[53px]">
-            <div className="flex items-center gap-6 h-full overflow-x-auto whitespace-nowrap scrollbar-none">
+          <div className="flex items-center border-b border-[#E0E6EB] px-4 sm:px-[30px] h-[53px] w-full overflow-hidden">
+            <div className="flex items-center gap-3 sm:gap-6 h-full w-full overflow-x-auto whitespace-nowrap scrollbar-none">
               {(["Leads da Gestire", "Actual Pipeline", "Settings"] as const).map((tab) => {
                 const isActive = activeSubTab === tab;
                 return (
@@ -1548,7 +1567,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                       setActiveActionsRowId(null);
                       setActiveAssigneeRowId(null);
                     }}
-                    className={`h-full px-4 text-[18px] font-semibold transition-all relative border-b-2 flex items-center gap-2.5 font-sans whitespace-nowrap ${isActive
+                    className={`h-full px-2 sm:px-4 text-sm sm:text-[18px] font-semibold transition-all relative border-b-2 flex items-center gap-1.5 sm:gap-2.5 font-sans whitespace-nowrap ${isActive
                         ? "border-[#635BFF] text-[#635BFF]"
                         : "border-transparent text-[#29343D] hover:opacity-85"
                       }`}
@@ -1885,18 +1904,38 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                     </div>
 
                     {/* Data Range Filter */}
-                    <div className="flex flex-col gap-2 items-start">
+                    <div className="flex flex-col gap-2 items-start" ref={dataRangeRef}>
                       <span className="text-[12px] font-semibold text-[#98A4AE] leading-4">Data Range</span>
                       <div className="relative">
                         <button
                           type="button"
+                          onClick={() => setIsDataRangeDropdownOpen(!isDataRangeDropdownOpen)}
                           className="inline-flex h-9 w-[150px] items-center justify-between gap-2 rounded-lg border border-[#E0E6EB] bg-white px-4 text-[12px] font-medium text-[#29343D] hover:bg-slate-50 cursor-pointer"
                         >
-                          <span>All Time</span>
+                          <span>{dataRange}</span>
                           <svg width="12" height="7" viewBox="0 0 12 7" fill="none" stroke="#29343D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="m1 1 5 5 5-5" />
                           </svg>
                         </button>
+                        {isDataRangeDropdownOpen && (
+                          <div className="absolute left-0 top-10 z-30 w-[150px] rounded-lg border border-[#eef2f6] bg-white p-2 shadow-xl flex flex-col gap-1">
+                            {["All Time", "Today", "Yesterday", "Last 7 Days", "Last 30 Days"].map((range) => (
+                              <button
+                                key={range}
+                                type="button"
+                                onClick={() => {
+                                  setDataRange(range);
+                                  setIsDataRangeDropdownOpen(false);
+                                }}
+                                className={`text-left w-full px-3 py-2 text-xs font-semibold rounded-lg hover:bg-slate-50 transition-colors ${
+                                  dataRange === range ? "text-[#635BFF] bg-indigo-50/40" : "text-slate-600"
+                                }`}
+                              >
+                                {range}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -1926,7 +1965,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                   </div>
 
                   {/* Configure Columns */}
-                  <div className="flex items-center gap-2 self-end">
+                  <div className="flex items-center gap-2 self-end" ref={columnsDropdownRef}>
                     <div className="relative">
                       <button
                         type="button"
@@ -1940,7 +1979,7 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
                         Columns
                       </button>
                       {columnVisibilityMenuOpen && (
-                        <div className="absolute right-0 top-10 z-20 w-[200px] rounded-xl bg-white p-3 shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.2)] border border-slate-100 text-left flex flex-col gap-1.5">
+                        <div className="absolute left-0 sm:left-auto sm:right-0 top-10 z-20 w-[200px] rounded-xl bg-white p-3 shadow-[0px_16px_32px_-8px_rgba(12,12,13,0.2)] border border-slate-100 text-left flex flex-col gap-1.5">
                           <span className="block px-1 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Visible Columns</span>
                           {getPipelineStages(pipelineStatus).map((stage) => (
                             <label
@@ -1986,7 +2025,15 @@ export default function LeadsPipelinePage({ setActiveTab }: { setActiveTab?: (ta
 
                     const stageLeads = leads
                       .filter((l) => l.stage === stage.id)
-                      .filter((l) => priorityFilter === "All" || l.priority === priorityFilter);
+                      .filter((l) => priorityFilter === "All" || l.priority === priorityFilter)
+                      .filter((l) => {
+                        if (dataRange === "All Time") return true;
+                        if (dataRange === "Today") return l.receivedDaysAgo <= 0;
+                        if (dataRange === "Yesterday") return l.receivedDaysAgo === 1;
+                        if (dataRange === "Last 7 Days") return l.receivedDaysAgo <= 7;
+                        if (dataRange === "Last 30 Days") return l.receivedDaysAgo <= 30;
+                        return true;
+                      });
                     const isDragOver = dragOverColumnId === stage.id;
 
                     return (
