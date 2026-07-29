@@ -1,6 +1,6 @@
 # Salon Owner Dashboard SaaS
 
-## Broad Project Description
+## Project Description
 
 This project is a frontend-heavy SaaS dashboard built with `Next.js 16`, `React 19`, `TypeScript`, and `Tailwind CSS 4`. It represents an internal admin and operations platform for managing salons, subscriptions, staff, billing, analytics, support, automations, and regional business performance from a single interface.
 
