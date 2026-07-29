@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Salon Owner Dashboard SaaS
 
-## Getting Started
+## Broad Project Description
 
-First, run the development server:
+This project is a frontend-heavy SaaS dashboard built with `Next.js 16`, `React 19`, `TypeScript`, and `Tailwind CSS 4`. It represents an internal admin and operations platform for managing salons, subscriptions, staff, billing, analytics, support, automations, and regional business performance from a single interface.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The codebase is structured around a single client-driven application entry in `src/app/page.tsx`, where the active screen is controlled through React state instead of file-based multi-route pages. A shared `Layout` component combines a top header, responsive sidebar navigation, and a large content workspace. The sidebar supports both primary navigation and nested sub-navigation for analytics and salon-specific detail views.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The project includes around `43` source components and `48` public assets, which together form a fairly complete dashboard experience. Key areas include:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Dashboard overview with KPI cards, revenue trend chart, recent activity, alerts, and ticket previews
+- Salon management with list views and detailed salon profiles
+- Staff and permissions workflows for salon-level user administration
+- Billing and revenue analytics pages
+- Deep analytics modules for `MRR`, `ARR`, `ASP`, `LTV`, `cashflow`, `ARPA`, `churn`, `cohorts`, subscribers, leads, and trials
+- Support center with tickets, announcements, audiences, notes, and communication flows
+- Automations and mail center for notification history, filters, message details, and manual send actions
+- Regional performance map using `Leaflet` and `react-leaflet` with a client-only dynamic import
+- Rich visual UI patterns such as export actions, filters, tabs, modals, drawers, toasts, and interactive charts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+From the implementation, this project is best described as a polished SaaS admin dashboard prototype or frontend product shell. It is strong in UI coverage, feature breadth, and dashboard behavior. Most data is currently mocked in component state, so the repo appears focused on frontend delivery, stakeholder demos, design implementation, and workflow simulation rather than a live connected backend.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technical Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Framework: `Next.js 16`
+- UI stack: `React 19`, `TypeScript`, `Tailwind CSS 4`
+- Maps: `Leaflet`, `react-leaflet`
+- Fonts: `Geist`, `Geist Mono`, `Manrope`
+- Rendering style: mostly client-side state-driven views
+- Data layer status: mock/demo data in component state, no evident API integration in this repo
