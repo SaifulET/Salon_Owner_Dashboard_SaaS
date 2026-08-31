@@ -153,6 +153,7 @@ export default function SalonsPage({
   const [suspendSalonId, setSuspendSalonId] = useState<string | null>(null);
   const [resetPasswordSalonId, setResetPasswordSalonId] = useState<string | null>(null);
   const [mailsSentSalonId, setMailsSentSalonId] = useState<string | null>(null);
+  const [viewingEmail, setViewingEmail] = useState<{ date: string; subject: string; type: string; source: string; category: string } | null>(null);
 
   // New state variables for password reset inputs
   const [newPassword, setNewPassword] = useState("");
@@ -2076,7 +2077,7 @@ export default function SalonsPage({
                         </td>
                         <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
                           <button
-                            onClick={() => alert(`Viewing details of email: "${item.subject}"`)}
+                            onClick={() => setViewingEmail(item)}
                             className="p-2 bg-[#f2f1ff] text-[#5e53fc] hover:bg-[#e4e2ff] rounded-lg transition-colors inline-flex"
                             title="View Details"
                           >
@@ -2107,6 +2108,45 @@ export default function SalonsPage({
                 className="px-6 py-2.5 bg-[#f2f1ff] hover:bg-[#e4e2ff] text-[#5e53fc] rounded-xl text-xs font-bold transition-all shadow-sm"
               >
                 View More
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Email Details Modal */}
+      {viewingEmail && (
+        <div className="fixed inset-0 bg-[#0f172a]/40 backdrop-blur-[6px] z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-[20px] w-full max-w-[440px] shadow-2xl p-6 flex flex-col gap-5 relative animate-in zoom-in-95 duration-200 text-left">
+            <div className="flex flex-col gap-1 pb-3 border-b border-slate-100">
+              <h3 className="text-lg font-bold text-[#0f172a]">Email details</h3>
+              <p className="text-xs text-slate-400 font-semibold mt-1">Processed on {viewingEmail.date}</p>
+            </div>
+
+            <div className="flex flex-col gap-4 text-xs font-semibold">
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Subject</span>
+                <span className="text-slate-800 text-sm font-extrabold">{viewingEmail.subject}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Source</span>
+                  <span className="text-slate-700">{viewingEmail.source}</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase">Status</span>
+                  <span className="text-slate-700">{viewingEmail.category}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-2">
+              <button
+                type="button"
+                onClick={() => setViewingEmail(null)}
+                className="px-5 py-2 bg-[#5e53fc] hover:bg-[#4d42eb] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-150"
+              >
+                Close
               </button>
             </div>
           </div>
