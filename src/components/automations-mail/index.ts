@@ -1,0 +1,10 @@
+export { default as AutomationsMailPage } from "./AutomationsMailPage";
+export { default as AutomationsMailHeader } from "./AutomationsMailHeader";
+export { default as AutomationsMailTopFilters } from "./AutomationsMailTopFilters";
+export { default as AutomationsMailSidebar } from "./AutomationsMailSidebar";
+export { default as AutomationsMailList } from "./AutomationsMailList";
+export { default as SendEmailModal } from "./SendEmailModal";
+export { default as ViewNotificationModal } from "./ViewNotificationModal";
+export * from "./types";
+export * from "./mockData";
+export * from "./AutomationsMailIcons";
